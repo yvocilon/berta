@@ -20,7 +20,7 @@
     function init() {
 
 
-        const MODEL_PATH = 'Lola.glb';
+        const MODEL_PATH = 'boss.glb';
         const canvas = document.querySelector('#c');
         const backgroundColor = 0xf1f1f1;
 
@@ -98,7 +98,7 @@
         scene.add(hemiLight);
 
         let d = 8.25;
-        let dirLight = new THREE.DirectionalLight(0xffffff, 0.67);
+        let dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
         dirLight.position.set(-8, 12, 8);
         dirLight.castShadow = true;
         dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
