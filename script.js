@@ -159,7 +159,7 @@
 
 
         if (needResize) {
-            renderer.setSize(width / 2, height / 2, false);
+            renderer.setSize(width, height, false);
         }
         return needResize;
     }
