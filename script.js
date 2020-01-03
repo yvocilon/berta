@@ -20,7 +20,7 @@
     function init() {
 
 
-        const MODEL_PATH = '/Lola.glb';
+        const MODEL_PATH = 'Lola.glb';
         const canvas = document.querySelector('#c');
         const backgroundColor = 0xf1f1f1;
 
