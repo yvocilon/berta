@@ -40,21 +40,21 @@
 
         // Add a camera
         camera = new THREE.PerspectiveCamera(
-            50,
+            90,
             window.innerWidth / window.innerHeight,
             0.1,
             1000
         );
 
-        camera.position.z = 30
+        camera.position.z = -5;
         camera.position.x = 0;
-        camera.position.y = -3;
+        camera.position.y = 2;
 
         var loader = new THREE.GLTFLoader();
 
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        // controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-        controls.update();
+        // controls.update();
 
         loader.load(
             MODEL_PATH,
@@ -77,9 +77,15 @@
                 model.scale.set(6, 6, 6);
                 model.position.y = -11;
 
+
+
+                model.add(camera);
+
                 scene.add(model);
 
                 loaderAnim.remove();
+
+                camera.lookAt(model.position);
 
                 mixer = new THREE.AnimationMixer(model);
 
@@ -94,6 +100,9 @@
                 backAnim = mixer.clipAction(backAnim);
 
                 idle.play();
+
+
+
 
             },
             undefined, // We don't need this function
@@ -173,7 +182,15 @@
             }
         }
 
-        controls.update();
+        if (model) {
+
+
+
+            camera.lookAt(new THREE.Vector3(model.position.x, model.position.y + 20, model.position.z));
+        }
+
+
+        //   controls.update();
 
         requestAnimationFrame(update);
     }
