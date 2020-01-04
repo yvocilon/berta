@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html --out-dir docs"
+    "build": "parcel build src/index.html --out-dir docs --public-url /berta"
   },
   "repository": {
     "type": "git",
