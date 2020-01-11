@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-(function() {
+(function () {
   // Set our main variables
   let scene,
     renderer,
@@ -26,6 +26,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
   function init() {
     const MODEL_PATH = "boss.glb";
+    const TREE = 'tree.glb';
+
     const canvas = document.querySelector("#c");
     const backgroundColor = 0xf1f1f1;
 
@@ -58,9 +60,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     controls.update();
 
+
     loader.load(
       MODEL_PATH,
-      function(gltf) {
+      function (gltf) {
         model = gltf.scene;
         let fileAnimations = gltf.animations;
 
@@ -97,7 +100,34 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
         idle.play();
       },
       undefined, // We don't need this function
-      function(error) {
+      function (error) {
+        console.error(error);
+      }
+    );
+
+    loader.load(
+      TREE,
+      function (gltf) {
+        const tree = gltf.scene;
+
+
+        tree.traverse(o => {
+          if (o.isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+            o.material.metalness = 0;
+            //o.material = stacy_mtl;
+          }
+        });
+
+        tree.scale.set(2, 2, 2);
+        tree.position.y = -11;
+        tree.position.z = -10;
+        scene.add(tree);
+
+      },
+      undefined, // We don't need this function
+      function (error) {
         console.error(error);
       }
     );
