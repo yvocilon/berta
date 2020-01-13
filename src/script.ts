@@ -71,6 +71,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     controls = new OrbitControls(camera, renderer.domElement);
 
+    controls.maxPolarAngle = (Math.PI / 2)
+
     controls.update();
 
 
@@ -87,14 +89,20 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
             o.material.metalness = 0;
             //o.material = stacy_mtl;
           }
+          o.frustumCulled = false;
         });
+
+        model.frustumCulled = false;
 
         model.scale.set(6, 6, 6);
         model.position.y = -11;
 
         scene.add(model);
 
+
+
         loaderAnim.remove();
+
 
         mixer = new THREE.AnimationMixer(model);
 
