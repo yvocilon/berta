@@ -31,10 +31,23 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     const canvas = document.querySelector("#c");
     const backgroundColor = 0xf1f1f1;
 
+    const cubeLoader = new THREE.CubeTextureLoader();
+    const cubeTexture = cubeLoader.load([
+      'textures/cloudtop_ft.jpg',
+      'textures/cloudtop_bk.jpg',
+      'textures/cloudtop_up.jpg',
+      'textures/cloudtop_dn.jpg',
+      'textures/cloudtop_rt.jpg',
+      'textures/cloudtop_lf.jpg',
+    ]);
+
+
+
     // Init the scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(backgroundColor);
-    scene.fog = new THREE.Fog(backgroundColor, 60, 100);
+    //scene.background = new THREE.Color(backgroundColor);
+    //scene.fog = new THREE.Fog(backgroundColor, 60, 100);
+    scene.background = cubeTexture;
 
     // Init the renderer
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -44,10 +57,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     // Add a camera
     camera = new THREE.PerspectiveCamera(
-      50,
+      60,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      10000
     );
 
     camera.position.z = 30;
@@ -151,19 +164,19 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     scene.add(dirLight);
 
     // Floor
-    let floorGeometry = new THREE.PlaneGeometry(5000, 5000, 1, 1);
+    let floorGeometry = new THREE.PlaneGeometry(250, 250, 1, 1);
 
-    const texture = new THREE.TextureLoader().load('textures/wooden-planks.jpg', function (te) {
+    const texture = new THREE.TextureLoader().load('textures/floor.jpg', function (te) {
       te.wrapS = te.wrapT = THREE.RepeatWrapping;
       te.offset.set(0, 0);
-      te.repeat.set(400, 400);
+      te.repeat.set(40, 40);
     });
 
 
-    const aoMap = new THREE.TextureLoader().load('textures/wooden-planks-ao.jpg');
-    const normalMap = new THREE.TextureLoader().load('textures/wooden-planks-normal.jpg');
-    const roughnessMap = new THREE.TextureLoader().load('textures/wooden-planks-roughness.jpg');
-    const bumpMap = new THREE.TextureLoader().load('textures/wooden-planks-normal-height.jpg');
+    const aoMap = new THREE.TextureLoader().load('textures/floor-ao.jpg');
+    const normalMap = new THREE.TextureLoader().load('textures/floor-normal.jpg');
+    const roughnessMap = new THREE.TextureLoader().load('textures/floor-roughness.jpg');
+    const bumpMap = new THREE.TextureLoader().load('textures/floor-height.jpg');
 
     let floorMaterial = new THREE.MeshStandardMaterial({
       map: texture,
