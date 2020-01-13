@@ -67,8 +67,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
         model = gltf.scene;
         let fileAnimations = gltf.animations;
 
-        console.log(fileAnimations);
-
         model.traverse(o => {
           if (o.isMesh) {
             o.castShadow = true;
@@ -154,15 +152,35 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     // Floor
     let floorGeometry = new THREE.PlaneGeometry(5000, 5000, 1, 1);
-    let floorMaterial = new THREE.MeshPhongMaterial({
-      color: 0xeeeeee,
-      shininess: 0
+
+    const texture = new THREE.TextureLoader().load('textures/wooden-planks.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(400, 400);
+    });
+
+
+    const aoMap = new THREE.TextureLoader().load('textures/wooden-planks-ao.jpg');
+    const normalMap = new THREE.TextureLoader().load('textures/wooden-planks-normal.jpg');
+    const roughnessMap = new THREE.TextureLoader().load('textures/wooden-planks-roughness.jpg');
+    const bumpMap = new THREE.TextureLoader().load('textures/wooden-planks-normal-height.jpg');
+
+    let floorMaterial = new THREE.MeshStandardMaterial({
+      map: texture,
+      aoMap,
+      normalMap,
+      roughnessMap,
+      bumpMap
     });
 
     let floor = new THREE.Mesh(floorGeometry, floorMaterial);
     floor.rotation.x = -0.5 * Math.PI;
     floor.receiveShadow = true;
     floor.position.y = -11;
+
+
+
+
     scene.add(floor);
   }
 
