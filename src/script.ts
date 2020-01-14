@@ -153,9 +153,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       }
     );
 
-    let dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    let dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
     dirLight.color.setHSL(0.1, 1, 0.95);
-    dirLight.position.set(5, 4, -2);
+    dirLight.position.set(20, 5, -4);
     dirLight.position.multiplyScalar(30);
     scene.add(dirLight);
 
@@ -164,7 +164,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     dirLight.shadow.mapSize.width = 2048;
     dirLight.shadow.mapSize.height = 2048;
 
-    var d = 50;
+    var d = 150;
 
     dirLight.shadow.camera.left = - d;
     dirLight.shadow.camera.right = d;
@@ -174,7 +174,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     dirLight.shadow.camera.far = 3500;
     dirLight.shadow.bias = - 0.0001;
 
-    //let dirLightHeper = new THREE.DirectionalLightHelper(dirLight, 10);
+    let dirLightHeper = new THREE.DirectionalLightHelper(dirLight, 10);
     //scene.add(dirLightHeper);
 
 
@@ -185,7 +185,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     scene.add(hemiLight);
 
     let hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 10);
-    //scene.add(hemiLightHelper);
+    // scene.add(hemiLightHelper);
 
     // Floor
     let floorGeometry = new THREE.PlaneGeometry(250, 250, 1, 1);
