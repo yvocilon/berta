@@ -243,6 +243,11 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       }
     }
 
+    if (model) {
+      controls.target = model.position;
+    }
+
+
     controls.update();
 
     requestAnimationFrame(update);
