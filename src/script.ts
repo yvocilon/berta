@@ -15,6 +15,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     idle,
     walkAnim,
     backAnim,
+    leftAnim,
+    rightAnim,
+    jumpAnim,
     controls, // Idle, the default state our character returns to
     clock = new THREE.Clock(), // Used for anims, which run to a clock instead of frame rate
     currentlyAnimating = false, // Used to check whether characters neck is being used in another anim
@@ -84,6 +87,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
         model = gltf.scene;
         let fileAnimations = gltf.animations;
 
+
+
         model.traverse(o => {
           if (o.isMesh) {
             o.castShadow = true;
@@ -110,15 +115,21 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
         let idleAnim = THREE.AnimationClip.findByName(fileAnimations, "idle");
 
-        walkAnim = fileAnimations.find(val => val.name === "walk-forward");
-        backAnim = fileAnimations.find(val => val.name === "walk-backwards");
+        walkAnim = fileAnimations.find(val => val.name === "run-forward");
+        backAnim = fileAnimations.find(val => val.name === "run-backward");
+        rightAnim = fileAnimations.find(val => val.name === "strafe-right");
+        leftAnim = fileAnimations.find(val => val.name === "strafe-left");
+        jumpAnim = fileAnimations.find(val => val.name === "jump");
 
         idle = mixer.clipAction(idleAnim);
 
         walkAnim = mixer.clipAction(walkAnim);
         backAnim = mixer.clipAction(backAnim);
+        leftAnim = mixer.clipAction(leftAnim);
+        rightAnim = mixer.clipAction(rightAnim);
 
-        idle.play();
+        animate(idle);
+
       },
       undefined, // We don't need this function
       function (error) {
@@ -242,7 +253,12 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     scene.add(floor);
   }
 
-  const speed = 2;
+  const speed = {
+    left: 0.4,
+    right: 0.4,
+    forward: 0.45,
+    backward: 0.3,
+  }
 
   function update() {
     if (mixer) {
@@ -258,29 +274,29 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     renderer.render(scene, camera);
 
     if (direction) {
+
+
       switch (direction) {
         case "forward": {
-          model.position.z += speed;
+          model.position.z += speed.forward;
           break;
         }
         case "backward": {
-          model.position.z -= speed;
+          model.position.z -= speed.backward;
           break;
         }
         case "left": {
-          model.position.x += speed;
+          model.position.x += speed.left;
           break;
         }
         case "right": {
-          model.position.x -= speed;
+          model.position.x -= speed.right;
           break;
         }
       }
     }
 
     if (model) {
-
-
       controls.target = new THREE.Vector3(model.position.x, model.position.y + 10, model.position.z)
     }
 
@@ -319,27 +335,34 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     38: "forward",
     39: "right", //d
     37: "left", // a
-    40: "backward" // s
+    40: "backward", // s
+    32: "jump" //spacebar
   };
 
   function onKeyUp(event) {
     const key = map[event.which];
 
     if (key === direction) {
-      if (direction === "backward") {
-        idle.reset();
-        idle.play();
-        backAnim.crossFadeTo(idle, 0.25, true);
-      }
-
-      if (direction === "forward") {
-        idle.reset();
-        idle.play();
-        walkAnim.crossFadeTo(idle, 0.25, true);
-      }
-
-      direction = "";
+      fadeToIdle();
     }
+  }
+
+  let currentAnimation;
+
+  function animate(to) {
+
+    if (!currentAnimation) {
+      currentAnimation = to;
+
+      currentAnimation.play();
+      return;
+    }
+
+    to.reset();
+    to.play();
+
+    currentAnimation.crossFadeTo(to, 0.25, true);
+    currentAnimation = to;
   }
 
   function onKeyDown(event) {
@@ -353,37 +376,36 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       if (dontUpdate) {
         return;
       }
+
+      if (key === 'jump') {
+        animate(jumpAnim);
+      }
+
       if (key === "forward") {
-        walkAnim.timeScale = 1;
-
-        walkAnim.reset();
-        walkAnim.play();
-
-        idle.crossFadeTo(walkAnim, 0.25, true);
-        //idle.play();
+        animate(walkAnim);
       }
+
       if (key === "backward") {
-        backAnim.reset();
-
-        backAnim.play();
-
-        idle.crossFadeTo(backAnim, 0.25, true);
+        animate(backAnim);
       }
+      if (key === "left") {
+        animate(leftAnim);
+      }
+
+      if (key === "right") {
+        animate(rightAnim);
+      }
+
     } else {
-      if (direction === "backward") {
-        idle.reset();
-        idle.play();
-        backAnim.crossFadeTo(idle, 0.25, true);
-      }
-
-      if (direction === "forward") {
-        idle.reset();
-        idle.play();
-        walkAnim.crossFadeTo(idle, 0.25, true);
-      }
-
-      direction = "";
+      fadeToIdle();
     }
+  }
+
+  function fadeToIdle() {
+
+    animate(idle);
+
+    direction = '';
   }
 
   function createWall(width: number, height: number) {
