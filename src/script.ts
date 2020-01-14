@@ -71,7 +71,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    controls.maxPolarAngle = (Math.PI * 0.48)
+    controls.maxPolarAngle = (Math.PI * 0.60)
 
     controls.minDistance = 5;
     controls.maxDistance = 100;
@@ -202,12 +202,17 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     floor.position.y = -11;
 
 
+    const wall = createWall(250, 25);
 
+    scene.add(wall(0, 0, -125));
+    scene.add(wall(0, 0, 125));
+    scene.add(wall(-125, 0, 0, Math.PI / 2));
+    scene.add(wall(125, 0, 0, Math.PI / 2));
 
     scene.add(floor);
   }
 
-  const speed = 0.02;
+  const speed = 2;
 
   function update() {
     if (mixer) {
@@ -244,7 +249,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     }
 
     if (model) {
-      controls.target = model.position;
+
+
+      controls.target = new THREE.Vector3(model.position.x, model.position.y + 10, model.position.z)
     }
 
 
@@ -346,6 +353,49 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       }
 
       direction = "";
+    }
+  }
+
+  function createWall(width: number, height: number) {
+
+
+    var geometry = new THREE.BoxGeometry(width, height, 1);
+
+
+    const texture = new THREE.TextureLoader().load('textures/wall.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 20);
+    });
+
+
+    const aoMap = new THREE.TextureLoader().load('textures/wall-ao.jpg');
+    const normalMap = new THREE.TextureLoader().load('textures/wall-normal.jpg');
+    const roughnessMap = new THREE.TextureLoader().load('textures/wall-roughness.jpg');
+    const bumpMap = new THREE.TextureLoader().load('textures/wall-height.jpg');
+
+    let material = new THREE.MeshStandardMaterial({
+      map: texture,
+      aoMap,
+      normalMap,
+      roughnessMap,
+      bumpMap
+    });
+
+    return function (x: number, y: number, z: number, rotation?: number) {
+
+      var cube = new THREE.Mesh(geometry, material);
+
+      cube.position.x = x;
+      cube.position.y = y;
+      cube.position.z = z;
+
+      if (rotation) {
+        cube.rotation.y = rotation;
+      }
+
+
+      return cube;
     }
   }
 })();
