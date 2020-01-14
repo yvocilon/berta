@@ -359,13 +359,13 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   function createWall(width: number, height: number) {
 
 
-    var geometry = new THREE.BoxGeometry(width, height, 1);
+    var geometry = new THREE.BoxGeometry(width, height, 10);
 
 
     const texture = new THREE.TextureLoader().load('textures/wall.jpg', function (te) {
       te.wrapS = te.wrapT = THREE.RepeatWrapping;
       te.offset.set(0, 0);
-      te.repeat.set(20, 20);
+      te.repeat.set(20, 2);
     });
 
 
