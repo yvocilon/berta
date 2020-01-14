@@ -179,7 +179,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     const texture = new THREE.TextureLoader().load('textures/floor.jpg', function (te) {
       te.wrapS = te.wrapT = THREE.RepeatWrapping;
       te.offset.set(0, 0);
-      te.repeat.set(40, 40);
+      te.repeat.set(20, 20);
     });
 
 
