@@ -71,7 +71,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
     controls = new OrbitControls(camera, renderer.domElement);
 
-    controls.maxPolarAngle = (Math.PI * 0.60)
+    controls.maxPolarAngle = (Math.PI * 0.48)
 
     controls.minDistance = 5;
     controls.maxDistance = 100;
