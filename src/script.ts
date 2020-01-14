@@ -115,11 +115,22 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
         let idleAnim = THREE.AnimationClip.findByName(fileAnimations, "idle");
 
+        mixer.addEventListener('finished', function (e) {
+
+          animate(idle);
+
+          direction = '';
+
+
+        })
+
         walkAnim = fileAnimations.find(val => val.name === "run-forward");
         backAnim = fileAnimations.find(val => val.name === "run-backward");
         rightAnim = fileAnimations.find(val => val.name === "strafe-right");
         leftAnim = fileAnimations.find(val => val.name === "strafe-left");
         jumpAnim = fileAnimations.find(val => val.name === "jump");
+
+
 
         idle = mixer.clipAction(idleAnim);
 
@@ -127,8 +138,14 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
         backAnim = mixer.clipAction(backAnim);
         leftAnim = mixer.clipAction(leftAnim);
         rightAnim = mixer.clipAction(rightAnim);
+        jumpAnim = mixer.clipAction(jumpAnim);
+
+        jumpAnim.setLoop(THREE.LoopOnce);
+
 
         animate(idle);
+
+
 
       },
       undefined, // We don't need this function
@@ -306,6 +323,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     requestAnimationFrame(update);
   }
 
+
   update();
 
   function resizeRendererToDisplaySize(renderer) {
@@ -361,6 +379,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     to.reset();
     to.play();
 
+
     currentAnimation.crossFadeTo(to, 0.25, true);
     currentAnimation = to;
   }
@@ -402,6 +421,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   }
 
   function fadeToIdle() {
+
+    if (direction === 'jump') {
+      return;
+    }
 
     animate(idle);
 
