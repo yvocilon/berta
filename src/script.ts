@@ -153,25 +153,39 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       }
     );
 
-    // Add lights
-    let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);
-    hemiLight.position.set(0, 50, 0);
-    // Add hemisphere light to scene
-    scene.add(hemiLight);
+    let dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.color.setHSL(0.1, 1, 0.95);
+    dirLight.position.set(5, 4, -2);
+    dirLight.position.multiplyScalar(30);
+    scene.add(dirLight);
 
-    let d = 8.25;
-    let dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    dirLight.position.set(-8, 40, 8);
     dirLight.castShadow = true;
-    dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024);
-    dirLight.shadow.camera.near = 0.1;
-    dirLight.shadow.camera.far = 1500;
-    dirLight.shadow.camera.left = d * -1;
+
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+
+    var d = 50;
+
+    dirLight.shadow.camera.left = - d;
     dirLight.shadow.camera.right = d;
     dirLight.shadow.camera.top = d;
-    dirLight.shadow.camera.bottom = d * -1;
-    // Add directional Light to scene
-    scene.add(dirLight);
+    dirLight.shadow.camera.bottom = - d;
+
+    dirLight.shadow.camera.far = 3500;
+    dirLight.shadow.bias = - 0.0001;
+
+    //let dirLightHeper = new THREE.DirectionalLightHelper(dirLight, 10);
+    //scene.add(dirLightHeper);
+
+
+    let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.6);
+    hemiLight.color.setHSL(0.6, 1, 0.6);
+    hemiLight.groundColor.setHSL(0.095, 1, 0.75);
+    hemiLight.position.set(0, 50, 0);
+    scene.add(hemiLight);
+
+    let hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 10);
+    //scene.add(hemiLightHelper);
 
     // Floor
     let floorGeometry = new THREE.PlaneGeometry(250, 250, 1, 1);
@@ -183,10 +197,26 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     });
 
 
-    const aoMap = new THREE.TextureLoader().load('textures/floor-ao.jpg');
-    const normalMap = new THREE.TextureLoader().load('textures/floor-normal.jpg');
-    const roughnessMap = new THREE.TextureLoader().load('textures/floor-roughness.jpg');
-    const bumpMap = new THREE.TextureLoader().load('textures/floor-height.jpg');
+    const aoMap = new THREE.TextureLoader().load('textures/floor-ao.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const normalMap = new THREE.TextureLoader().load('textures/floor-normal.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const roughnessMap = new THREE.TextureLoader().load('textures/floor-roughness.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const bumpMap = new THREE.TextureLoader().load('textures/floor-height.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
 
     let floorMaterial = new THREE.MeshStandardMaterial({
       map: texture,
@@ -359,7 +389,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
   function createWall(width: number, height: number) {
 
 
-    var geometry = new THREE.BoxGeometry(width, height, 10);
+    var geometry = new THREE.BoxGeometry(width, height, 1);
 
 
     const texture = new THREE.TextureLoader().load('textures/wall.jpg', function (te) {
@@ -369,23 +399,40 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     });
 
 
-    const aoMap = new THREE.TextureLoader().load('textures/wall-ao.jpg');
-    const normalMap = new THREE.TextureLoader().load('textures/wall-normal.jpg');
-    const roughnessMap = new THREE.TextureLoader().load('textures/wall-roughness.jpg');
-    const bumpMap = new THREE.TextureLoader().load('textures/wall-height.jpg');
+    const aoMap = new THREE.TextureLoader().load('textures/wall-ao.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const normalMap = new THREE.TextureLoader().load('textures/wall-normal.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const roughnessMap = new THREE.TextureLoader().load('textures/wall-roughness.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
+    const bumpMap = new THREE.TextureLoader().load('textures/wall-height.jpg', function (te) {
+      te.wrapS = te.wrapT = THREE.RepeatWrapping;
+      te.offset.set(0, 0);
+      te.repeat.set(20, 2);
+    });
 
     let material = new THREE.MeshStandardMaterial({
       map: texture,
       aoMap,
       normalMap,
       roughnessMap,
-      bumpMap
+      bumpMap,
     });
 
     return function (x: number, y: number, z: number, rotation?: number) {
 
       var cube = new THREE.Mesh(geometry, material);
-
+      cube.receiveShadow = true;
+      cube.castShadow = true;
       cube.position.x = x;
       cube.position.y = y;
       cube.position.z = z;
