@@ -240,7 +240,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       te.offset.set(0, 0);
       te.repeat.set(20, 2);
     });
-    const bumpMap = new THREE.TextureLoader().load('textures/floor-height.jpg', function (te) {
+    const bumpMap = new THREE.TextureLoader().load('textures/floor-height.png', function (te) {
       te.wrapS = te.wrapT = THREE.RepeatWrapping;
       te.offset.set(0, 0);
       te.repeat.set(20, 2);
@@ -459,7 +459,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
       te.offset.set(0, 0);
       te.repeat.set(20, 2);
     });
-    const bumpMap = new THREE.TextureLoader().load('textures/wall-height.jpg', function (te) {
+    const bumpMap = new THREE.TextureLoader().load('textures/wall-height.png', function (te) {
       te.wrapS = te.wrapT = THREE.RepeatWrapping;
       te.offset.set(0, 0);
       te.repeat.set(20, 2);
