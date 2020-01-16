@@ -277,6 +277,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     backward: 0.3,
   }
 
+  let dir = new THREE.Vector3();
+
   function update() {
     if (mixer) {
       mixer.update(clock.getDelta());
@@ -295,7 +297,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
       switch (direction) {
         case "forward": {
-          model.position.z += speed.forward;
+          camera.getWorldDirection(dir);
+          dir.y = 0;
+          model.position.addScaledVector(dir, speed.forward)
           break;
         }
         case "backward": {
