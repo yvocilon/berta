@@ -77,7 +77,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
     controls.maxPolarAngle = (Math.PI * 0.60)
 
     controls.minDistance = 5;
-    controls.maxDistance = 100;
+    controls.maxDistance = 20;
 
     controls.update();
 
@@ -279,6 +279,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
   let dir = new THREE.Vector3();
 
+
   function update() {
     if (mixer) {
       mixer.update(clock.getDelta());
@@ -303,15 +304,34 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
           break;
         }
         case "backward": {
-          model.position.z -= speed.backward;
+
+          camera.getWorldDirection(dir);
+          dir.y = 0;
+
+          dir.x = dir.x * -1;
+          dir.z = dir.z * -1;
+
+          model.position.addScaledVector(dir, speed.backward);
           break;
         }
         case "left": {
-          model.position.x += speed.left;
+          camera.getWorldDirection(dir);
+          dir.y = 0;
+
+          dir.x = dir.x * -0.5;
+          dir.z = dir.z * -0.5;
+
+          model.position.addScaledVector(dir, speed.left);
           break;
         }
         case "right": {
-          model.position.x -= speed.right;
+          camera.getWorldDirection(dir);
+          dir.y = 0;
+
+          dir.x = dir.x * 0.5;
+          dir.z = dir.z * 0.5;
+
+          model.position.addScaledVector(dir, speed.right);
           break;
         }
       }
