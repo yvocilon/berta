@@ -8,6 +8,15 @@
   height: 100%;
 }
 
+.webgl-content .logo,
+.progress {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .webgl-content .logo {
   background: url("progressLogo.Light.png") no-repeat center / contain;
   width: 154px;
